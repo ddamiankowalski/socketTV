@@ -4,17 +4,22 @@ using namespace cv;
 
 int main(int, char**)
 {
+
+// tworzymy obiekt cap
 VideoCapture cap;
+
+// otwieramy plik sample.mp4
 cap.open("sample.mp4");
 
+// tworzymy nowe okno i nazywamy je 'Video'
 namedWindow("Video",1);
 for(;;)
 {
     Mat frame;
-    cap >> frame; // get a new frame from camera        
+    cap >> frame;    
     imshow("Video", frame);
     if(waitKey(30) >= 0) break;
 }
-// the camera will be deinitialized automatically in VideoCapture destructor
+
 return 0;
 }
