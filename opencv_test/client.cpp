@@ -7,7 +7,6 @@
 #include "opencv2/opencv.hpp"
 #include <vector>
 #include <stdio.h>
-#include <opencv2/opencv.hpp>
 #include <arpa/inet.h>
 #include <vector>
 
