@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
+#include <fcntl.h>
 
 using namespace cv;
 
@@ -18,6 +19,7 @@ int main(int, char**)
 
     // tworzymy nowy socket
     int server_fd, new_socket, valread;
+    pid_t childpid;
 
     struct sockaddr_in address;
     int opt = 1;
@@ -48,16 +50,9 @@ int main(int, char**)
         exit(EXIT_FAILURE);
     }
 
-    if(listen(server_fd, 3) < 0)
+    if(listen(server_fd, 100) < 0)
     {
         perror("blad podczas nasluchiwania");
-        exit(EXIT_FAILURE);
-    }
-
-    if ((new_socket = accept(server_fd, (struct sockaddr *)&address, 
-                       (socklen_t*)&addrlen))<0)
-    {
-        perror("accept");
         exit(EXIT_FAILURE);
     }
 
@@ -70,22 +65,34 @@ int main(int, char**)
 
     // tworzymy nowe okno i nazywamy je 'Video'
     namedWindow("Video",1);
+    Mat frame;
+        
+    // obliczamy jak duza jest jedna klatka
+    int imgSize = frame.total() * frame.elemSize();
+
     for(;;)
     {
-        Mat frame;
         cap >> frame;    
         imshow("Video", frame);
 
-        // obliczamy jak duza jest jedna klatka
-        int imgSize = frame.total() * frame.elemSize();
         //std::cout << cap.get(3) << cap.get(4) << std::endl;
 
-        // wysylamy frame do klienta
-        int bytes = send(new_socket, frame.data, imgSize, 0);
-
         // imwrite("alpha.png", frame); ta linia zapisuje image w folderze, moze byc potrzebne w przyszlosci
-        
+                    
         if(waitKey(30) >= 0) break;
+
+        // socket accept
+        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, 
+                    (socklen_t*)&addrlen))<0)
+        {
+            perror("accept");
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            printf("DODANO KLIENTA");
+        }
     }
+      
     return 0;
 }
