@@ -21,7 +21,13 @@ for(;;)
     Mat frame;
     cap >> frame;    
     imshow("Video", frame);
+
+    // obliczamy jak duza jest jedna klatka
+    int imgSize = frame.total() * frame.elemSize();
+    std::cout << imgSize << std::endl;
+
     // imwrite("alpha.png", frame); ta linia zapisuje image w folderze, moze byc potrzebne w przyszlosci
+    
     if(waitKey(30) >= 0) break;
 }
 
