@@ -107,5 +107,19 @@ Mat receive_frame(int sockfd)
         }
     }
 
-    return img;
+    
+    // kernel(identity)
+    Mat kernel1 = Mat::ones(5,5, CV_64F);
+    Mat identity;
+    filter2D(img, identity, -1 , kernel1, Point(-1, -1), 0, 4);
+    
+    // blur(median_blurred)
+    Mat median_blurred;
+    medianBlur(img, median_blurred, (5,5));
+
+    // bilateral(bilateral_filter)
+    Mat bilateral_filter;
+    bilateralFilter(img, bilateral_filter, 9, 75, 75);
+
+    return bilateral_filter;
 }
