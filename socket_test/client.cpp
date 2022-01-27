@@ -37,13 +37,8 @@ int main(int, char**)
 
         if(waitKey(30) >= 0) break;
 
-        // wysylamy informacje ze jestesmy gotowi na kolejna ramke
         send_confirmation("ready", socketfd);
-
-        // czytamy kolejna ramke tutaj
         img = receive_frame(socketfd);
-
-        // zapisujemy ramke do mat i wyswietlamy
     }
 
     return 0;

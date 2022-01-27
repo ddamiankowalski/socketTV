@@ -33,6 +33,12 @@ int main(int, char**)
     while(true)
     {
         capture >> frame;
+
+        if(frame.empty())
+        {
+            capture.open("sample.mp4");
+        }
+
         imshow("Server", frame);
         if(waitKey(30) >= 0) break;
 
@@ -49,17 +55,18 @@ int main(int, char**)
             {
                 if(i == server_socket)
                 {
-                    // to oznacza ze server_socket moze przyjac kolejne polaczenie, wiec akceptujemy kolejne polaczenie
                     int client_socket = accept_new_connection(server_socket);
                     FD_SET(client_socket, &current_sockets);
                 } else
                 {
-                    // handle the connection, robimy tutaj cokolwiek co chcemy zrobic z socketem
                     send_current_frame(frame, i);
                 }
             }
         }
     }
+
+    capture.release();
+    destroyAllWindows();
 
     return 0;
 }
